@@ -1,23 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-include 'redirect_handler.php';
-include "config.php";
+require "./handler/loginHandler.php";
+$_SESSION['username'] = '';
+$login = new LoginHandler();
 
 if (isset($_POST['submit'])) {
-  $email = $_POST['email'];
-  $password = md5($_POST['pwd']);
-
-  $sql = "SELECT * FROM login_form WHERE email ='$email' AND password ='$password'";
-  $result = mysqli_query($conn, $sql);
-  if ($result->num_rows > 0) {
-    $row = mysqli_fetch_assoc($result);
-    $_SESSION['username'] = $row['username'];
-    redirect('index.php');
-  } else {
-    $_SESSION['status_code'] = 'error';
-    $_SESSION['status'] = 'The email or password is wrong';
-  }
+  $login->checkLogin($_POST['username'], md5($_POST['pwd']), 'user');
 }
 ?>
 
@@ -29,6 +18,11 @@ if (isset($_POST['submit'])) {
   <link rel="stylesheet" href="assets/fonts/ionicons.min.css" />
   <link rel="stylesheet" href="assets/css/Login-Form-Clean.css" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    .disclaimer {
+      display: none;
+    }
+  </style>
 </head>
 
 <body style="background: rgb(177, 213, 224)">
@@ -41,14 +35,14 @@ if (isset($_POST['submit'])) {
       <h2 class="visually-hidden">Login Form</h2>
       <div class="illustration">
         <i>
-          <img src="./assets/image/logo.png" class="rounded mx-auto d-block" alt="...">
+          <img src="./assets/image/basket-cart-icon-27.png" class="rounded mx-auto d-block" alt="...">
         </i>
       </div>
       <div class="mb-3">
-        <input class="form-control" type="email" id="email-field" name="email" placeholder="Email" style="border-radius: 4px" required/>
+      <input class="form-control" type="text" id="email-field" name="username" placeholder="Username" style="border-radius: 4px" required />
       </div>
       <div class="mb-3">
-        <input class="form-control" type="password" id="password-field" name="pwd" placeholder="Password" style="border-radius: 4px" required/>
+      <input class="form-control" type="password" id="password-field" name="pwd" placeholder="Password" style="border-radius: 4px" required />
       </div>
       <div class="mb-3">
         <button class="btn btn-primary d-block w-100" name="submit">
@@ -56,6 +50,9 @@ if (isset($_POST['submit'])) {
         </button>
       </div>
       <a class="forgot" href="register.php">Don't have an account?</a>
+      <a class="forgot" href="login-admin.php" style="font-weight: bold;margin-top: 10px;">
+      Admin Login 
+    </a>
     </form>
   </section>
   <script src="assets/bootstrap/js/bootstrap.min.js"></script>
@@ -64,5 +61,5 @@ if (isset($_POST['submit'])) {
 </html>
 
 <?php
-include 'script.php';
+include './config/script.php'
 ?>
