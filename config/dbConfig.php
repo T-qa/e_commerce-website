@@ -3,7 +3,7 @@ session_start();
 class DBConnect
 {
     private $hostname = 'localhost';
-    private $username = 'root';
+    private $username = 'wadp';
     private $password = '';
     private $dbname = 'e_commerce';
     private $conn;
