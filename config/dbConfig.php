@@ -4,7 +4,7 @@ class DBConnect
 {
     private $hostname = 'localhost';
     private $username = 'wadp';
-    private $password = '';
+    private $password = 'password';
     private $dbname = 'e_commerce';
     private $conn;
     function connect()
