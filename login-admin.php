@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-require "./classes/loginHandler.php";
+require "./handler/loginHandler.php";
 $login = new LoginHandler();
 
 if (isset($_POST['submit'])) {
