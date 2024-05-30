@@ -1,0 +1,10 @@
+# HTID:19809235: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
+php_value display_errors 1
+
+php_flag output_buffering on
+# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:19809235:
+RewriteEngine On 
+
+RewriteRule ^homepage?$ index.php
+RewriteRule ^product/([0-9]+) product-detail.php?product_id=$1
+RewriteRule ^category/([0-9]+) product-filter.php?category_id=$1
