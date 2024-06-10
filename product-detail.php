@@ -1,11 +1,13 @@
 <?php
 require_once('./classes/product.php');
 require_once('./classes/cart.php');
+require_once('./classes/wishlist.php');
 require_once('./config/url.php');
 $url = new URL();
 if (!$_SESSION['username']) {
   $_SESSION['username'] = '';
 }
+$wishlist = new Wishlist();
 $product = new Product();
 $cart = new Cart();
 if (isset($_POST['add-to-cart'])) {
