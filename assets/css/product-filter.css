@@ -1,0 +1,174 @@
+i.fa-solid.fa-chevron-down {
+	font-size: 12px;
+}
+
+.breadcrumb {
+	margin-top: 1rem;
+}
+
+.filter-bar {
+	background: #fff 0% 0% no-repeat padding-box;
+	box-shadow: 0 3px 6px #00000029;
+	border-radius: 14px;
+	margin: 20px 0;
+}
+
+.category-filter,
+.brand-filter,
+.sort-filter {
+	width: 170px;
+}
+
+details {
+	position: relative;
+}
+
+details.category-select {
+	min-width: 100px;
+}
+
+details[open] {
+	z-index: 1;
+}
+
+details[open] summary::before {
+	content: "";
+	display: block;
+	width: 100vw;
+	height: 100vh;
+	background: transparent;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+summary {
+	cursor: pointer;
+	list-style: none;
+}
+
+summary::after {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f107";
+	display: inline-block;
+	transform-origin: center center;
+	transition: transform ease-in-out 100ms;
+}
+
+summary:focus {
+	outline: none;
+}
+
+details[open] summary:after {
+	transform: rotate(180deg);
+}
+
+summary.radios {
+	counter-reset: radios;
+	text-align: center;
+}
+
+input[type="radio"] {
+	counter-increment: radios;
+	appearance: none;
+	display: none;
+}
+
+input[type="radio"]:checked {
+	display: inline;
+}
+
+input[type="radio"]::after {
+	content: attr(title);
+	display: inline;
+	font-size: 1rem;
+}
+
+ul.list {
+	counter-reset: labels;
+	width: 140px;
+	position: absolute;
+	top: calc(100% + 0.5rem);
+	left: 0;
+	z-index: 1000;
+	margin: 0;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	max-height: 200px;
+	overflow-y: auto;
+	background-color: #fff;
+}
+
+ul.list li {
+	margin: 0;
+	height: 30px;
+	padding: 5px 10px;
+	transition: all 0.2s ease-in-out;
+}
+
+ul.list li:hover {
+	background-color: rgb(242, 243, 245);
+}
+
+label {
+	width: 100%;
+	display: block;
+	cursor: pointer;
+}
+
+/* Filter Button */
+.filter-button {
+	background-color: #ffffff;
+	border: 1px solid #222222;
+	border-radius: 8px;
+	box-sizing: border-box;
+	color: #222222;
+	cursor: pointer;
+	display: inline-block;
+	font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 20px;
+	margin: 0;
+	outline: none;
+	padding: 13px 23px;
+	position: relative;
+	text-align: center;
+	text-decoration: none;
+	touch-action: manipulation;
+	transition: box-shadow 0.2s, -ms-transform 0.1s, -webkit-transform 0.1s, transform 0.1s;
+	user-select: none;
+	-webkit-user-select: none;
+	width: auto;
+}
+.filter-button:focus-visible {
+	box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+	transition: box-shadow 0.2s;
+}
+.filter-button:active {
+	background-color: #f7f7f7;
+	border-color: #000000;
+	transform: scale(0.96);
+}
+.filter-button:disabled {
+	border-color: #dddddd;
+	color: #dddddd;
+	cursor: not-allowed;
+	opacity: 1;
+}
+
+.search-bar {
+	width: 50%;
+}
+
+.search-bar .search-field {
+	flex: 1;
+	min-width: 100%;
+	border-left: none;
+}
+
+.search-bar .search-field input {
+	width: 90%;
+	text-overflow: ellipsis;
+}

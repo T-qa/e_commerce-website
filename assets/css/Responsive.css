@@ -1,0 +1,15 @@
+@media (max-width: 576px) {
+  .navbar {
+    display: flex;
+  }
+
+  .grid .grid-item {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .grid .grid-item {
+    width: 50% !important;
+  }
+}
