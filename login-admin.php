@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
                     Log In
                 </button>
             </div>
-            <a class="forgot" href="register.php">Don't have an account?</a>
+            <a class="forgot" href="admin-register.php">Don't have an account?</a>
             <a class="forgot" href="login.php" style="font-weight: bold;margin-top: 10px;">
                 Customer Login
             </a>

@@ -1,5 +1,5 @@
 <?php
-require_once('./classes/orders.php');
+require_once('./classes/order.php');
 $order = new Order();
 
 ?>

@@ -2,6 +2,32 @@
 require_once(__DIR__ . "/../config/dbconfig.php");
 class Admin
 {
+    public function registerAdmin($username, $password)
+    {
+        $DB = new DBConnect();
+        $sql = "INSERT INTO admin(username, password) VALUES ('$username', '$password')";
+        $result = mysqli_query($DB->connect(), $sql);
+        if ($result) {
+            $_SESSION['status_code'] = 'success';
+            $_SESSION['status'] = 'Register Successfully';
+        } else {
+            $_SESSION['status'] = 'Register Unsuccessfully';
+            $_SESSION['status_code'] = 'error';
+        }
+    }
+
+    public function checkUsername($username)
+    {
+        $DB = new DBConnect();
+        $sql = "SELECT * FROM admin WHERE username ='$username'";
+        $result = mysqli_query($DB->connect(), $sql);
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public function addAdmin($name, $password, $conf)
     {
         if ($password == $conf) {
