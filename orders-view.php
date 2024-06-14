@@ -1,5 +1,5 @@
 <?php
-require_once('./classes/orders.php');
+require_once('./classes/order.php');
 $order = new Order();
 if (isset($_POST['submit_update'])) {
     $order->changeOrderStatus($_POST['status-update'], $_POST['edit_id']);

@@ -204,7 +204,7 @@ if (isset($_POST['action'])) {
         function addToWishlist(id) {
             $(document).ready(function() {
                 $.ajax({
-                    url: 'index-logged.php',
+                    url: 'index.php',
                     type: 'POST',
                     data: {
                         id: id,

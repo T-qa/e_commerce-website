@@ -23,7 +23,7 @@ $order = new Order();
         <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
             <div class="position-sticky">
                 <div class="list-group list-group-flush mx-3 mt-4">
-                    <a href="index-logged.php" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-building fa-fw me-3"></i><span>Homepage</span></a>
+                    <a href="homepage" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-building fa-fw me-3"></i><span>Homepage</span></a>
                     <a href="profile-view.php" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-chart-bar fa-fw me-3"></i><span>Profile</span></a>
                     <a href="view-order-view.php" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-globe fa-fw me-3"></i><span>Orders</span></a>
                     <a href="login.php" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-building fa-fw me-3"></i><span>Logout</span></a>

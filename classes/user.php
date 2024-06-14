@@ -2,16 +2,58 @@
 require_once(__DIR__ . "/../config/dbconfig.php");
 class User
 {
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new DBConnect();
+    }
+
     public function removeUser($id)
     {
-        $DB = new DBConnect();
-        $sql = "delete from user where user_id=$id";
-        $result = mysqli_query($DB->connect(), $sql);
-        if ($result) {
-            header("refresh:0.5;url=user-view.php");
+        $conn = $this->db->connect();
+    
+    // Start transaction
+    $conn->begin_transaction();
+    
+    try {
+        // Delete the user
+        $stmt = $conn->prepare("DELETE FROM user WHERE user_id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        // Check if there are any remaining users
+        $result = $conn->query("SELECT COUNT(*) as count FROM user");
+        $row = $result->fetch_assoc();
+        $count = $row['count'];
+
+        // Reset AUTO_INCREMENT based on current count of users
+        if ($count > 0) {
+            // Get the current maximum user_id
+            $result = $conn->query("SELECT MAX(user_id) AS max_id FROM user");
+            $row = $result->fetch_assoc();
+            $max_id = $row['max_id'];
+
+            // Set AUTO_INCREMENT to the next available value
+            $new_auto_increment = $max_id + 1;
+            $conn->query("ALTER TABLE user AUTO_INCREMENT = $new_auto_increment");
         } else {
-            echo "<script>alert('Error')</script>";
+            // If no users are left, reset AUTO_INCREMENT to 1
+            $conn->query("ALTER TABLE user AUTO_INCREMENT = 1");
         }
+
+        // Commit transaction
+        $conn->commit();
+
+        header("refresh:0.5;url=user-view.php");
+    } catch (Exception $e) {
+        // Rollback transaction in case of error
+        $conn->rollback();
+        echo "<script>alert('Error deleting user: " . $e->getMessage() . "');</script>";
+    }
+
+    $stmt->close();
+    $conn->close();
     }
 
     public function checkExistEmail($email)

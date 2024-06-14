@@ -2,9 +2,6 @@
 require_once(__DIR__ . "/../config/dbconfig.php");
 class Brand
 {
-    private $name;
-    private $description;
-
     public function addBrand($name, $desc)
     {
         $DB = new DBConnect();
@@ -21,7 +18,7 @@ class Brand
             $_SESSION['status'] = 'Add Successfully';
             header("refresh:1.5;url=brand-view.php");
         } else {
-            die($stmt->error);
+            die("Error: " . $stmt->error);
         }
         
         // Close the statement and connection
@@ -45,7 +42,7 @@ class Brand
             $_SESSION['status'] = 'Update Successfully';
             header("refresh:1.5;url=brand-view.php");
         } else {
-            die($stmt->error);
+            die("Error: " . $stmt->error);
         }
         
         // Close the statement and connection
@@ -57,23 +54,36 @@ class Brand
     {
         $DB = new DBConnect();
         $conn = $DB->connect();
-        
-        // Prepare the SQL statement
+    
+        // Check if there are any products associated with this brand (optional, based on your needs)
+        $stmt_check = $conn->prepare("SELECT COUNT(*) AS total FROM product WHERE brand_id = ?");
+        $stmt_check->bind_param("i", $id);
+        $stmt_check->execute();
+        $result = $stmt_check->get_result();
+        $row = $result->fetch_assoc();
+        $total_products = $row['total'];
+
+        if ($total_products > 0) {
+            echo "<script>alert('Cannot delete brand. There are still products associated with it.')</script>";
+            return;
+        }
+
+        // Proceed with brand deletion
         $stmt = $conn->prepare("DELETE FROM brand WHERE id=?");
-        // Bind the parameter to the SQL query
         $stmt->bind_param("i", $id);
 
-        // Execute the prepared statement
         if ($stmt->execute()) {
+            // Reset auto-increment value after successful deletion
+            $conn->query("ALTER TABLE brand AUTO_INCREMENT = 1");
             header("refresh:0.5;url=brand-view.php");
         } else {
             echo "<script>alert('Error')</script>";
         }
         
-        // Close the statement and connection
         $stmt->close();
         $conn->close();
     }
+
     public function fetch()
     {
         $DB = new DBConnect();
