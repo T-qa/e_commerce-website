@@ -112,7 +112,7 @@ if (isset($_GET['delete_id_admin'])) {
             </thead>
             <tbody>
                 <?php
-                $rows = $admin->fetch();
+                $rows = $admin->fetchAllAdmins();
                 if (!empty($rows)) {
                     foreach ($rows as $row) {
                         echo '

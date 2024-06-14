@@ -1,6 +1,5 @@
 <?php
 require_once(__DIR__ . "/../config/dbconfig.php");
-
 class Category
 {
     private $db;
@@ -85,7 +84,7 @@ class Category
         }
     }
 
-    public function fetchAll()
+    public function fetch()
     {
         $conn = $this->db->connect();
         $data = [];

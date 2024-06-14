@@ -71,8 +71,8 @@ class Brand
             $stmt->bind_param("i", $id);
             $stmt->execute();
 
-            // Reset auto-increment value after successful deletion (if desired)
-            //$conn->query("ALTER TABLE brand AUTO_INCREMENT = 1");
+            // Reset auto-increment value after successful deletion
+            $conn->query("ALTER TABLE brand AUTO_INCREMENT = 1");
             header("refresh:0.5;url=brand-view.php");
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -85,7 +85,7 @@ class Brand
     public function fetch()
     {
         $conn = $this->db->connect();
-        $data = [];
+        $data = null;
 
         try {
             $stmt = $conn->prepare("SELECT * FROM brand");
