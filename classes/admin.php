@@ -1,112 +1,147 @@
 <?php
 require_once(__DIR__ . "/../config/dbconfig.php");
+
 class Admin
 {
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new DBConnect();
+    }
+
     public function registerAdmin($username, $password)
     {
-        $DB = new DBConnect();
-        $sql = "INSERT INTO admin(username, password) VALUES ('$username', '$password')";
-        $result = mysqli_query($DB->connect(), $sql);
+        $sql = "INSERT INTO admin(username, password) VALUES (?, ?)";
+        $conn = $this->db->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $username, $password);
+        $result = $stmt->execute();
+        $stmt->close();
+
         if ($result) {
             $_SESSION['status_code'] = 'success';
-            $_SESSION['status'] = 'Register Successfully';
+            $_SESSION['status'] = 'Registered Successfully';
         } else {
-            $_SESSION['status'] = 'Register Unsuccessfully';
             $_SESSION['status_code'] = 'error';
+            $_SESSION['status'] = 'Registration Unsuccessful';
         }
     }
 
     public function checkUsername($username)
     {
-        $DB = new DBConnect();
-        $sql = "SELECT * FROM admin WHERE username ='$username'";
-        $result = mysqli_query($DB->connect(), $sql);
-        if ($result->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $sql = "SELECT * FROM admin WHERE username = ?";
+        $conn = $this->db->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        return $result->num_rows > 0;
     }
-    
-    public function addAdmin($name, $password, $conf)
+
+    public function addAdmin($username, $password, $confirmPassword)
     {
-        if ($password == $conf) {
-            $DB = new DBConnect();
-            $sql = "INSERT INTO admin(username, password) VALUES ('$name','$password')";
-            $result = mysqli_query($DB->connect(), $sql);
-            if ($result) {
-                $_SESSION['status_code'] = 'success';
-                $_SESSION['status'] = 'Add Successfully';
-                header("refresh:1.5;url=admin-view.php");
-            } else {
-                die(mysqli_error($DB->connect()));
-            }
-        } else {
+        if ($password !== $confirmPassword) {
             $_SESSION['status_code'] = 'error';
-            $_SESSION['status'] = 'Confirmed Password is incorrect';
+            $_SESSION['status'] = 'Confirmed Password does not match';
+            return;
+        }
+
+        $sql = "INSERT INTO admin(username, password) VALUES (?, ?)";
+        $conn = $this->db->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $username, $password);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if ($result) {
+            $_SESSION['status_code'] = 'success';
+            $_SESSION['status'] = 'Admin Added Successfully';
+            header("refresh:1.5;url=admin-view.php");
+        } else {
+            die(mysqli_error($conn));
         }
     }
 
     public function checkLogin($username, $password)
     {
-        $DB = new DBConnect();
-        $sql = "SELECT * FROM admin WHERE username ='$username' AND password ='$password'";
-        $result = mysqli_query($DB->connect(), $sql);
-        if ($result->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $sql = "SELECT * FROM admin WHERE username = ? AND password = ?";
+        $conn = $this->db->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        return $result->num_rows > 0;
     }
-    public function updateAdmin($id, $name, $password)
+
+    public function updateAdmin($id, $username, $password)
     {
-        $DB = new DBConnect();
-        $sql = "UPDATE admin SET username='$name', password ='$password' WHERE admin_id ='$id'";
-        $query = mysqli_query($DB->connect(), $sql);
-        if ($query) {
+        $sql = "UPDATE admin SET username = ?, password = ? WHERE admin_id = ?";
+        $conn = $this->db->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssi", $username, $password, $id);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if ($result) {
             $_SESSION['status_code'] = 'success';
-            $_SESSION['status'] = 'Update Successfully';
+            $_SESSION['status'] = 'Admin Updated Successfully';
             header("refresh:1.5;url=admin-view.php");
         } else {
-            die(mysqli_error($DB->connect()));
+            die(mysqli_error($conn));
         }
     }
 
     public function removeAdmin($id)
     {
-        $DB = new DBConnect();
-        $sql = "delete from admin where admin_id=$id";
-        $result = mysqli_query($DB->connect(), $sql);
+        $sql = "DELETE FROM admin WHERE admin_id = ?";
+        $conn = $this->db->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $result = $stmt->execute();
+        $stmt->close();
+
         if ($result) {
             header("refresh:0.5;url=admin-view.php");
         } else {
-            echo "<script>alert('Error')</script>";
+            echo "<script>alert('Error deleting admin');</script>";
         }
     }
+
     public function fetchByUsername($username)
     {
-        $DB = new DBConnect();
-        $data = null;
-        $sql = "SELECT * FROM admin WHERE username='$username'";
-        $result = mysqli_query($DB->connect(), $sql);
-        if ($result) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $data[] = $row;
-            }
+        $sql = "SELECT * FROM admin WHERE username = ?";
+        $conn = $this->db->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
         }
         return $data;
     }
-    public function fetch()
+
+    public function fetchAllAdmins()
     {
-        $DB = new DBConnect();
-        $data = null;
         $sql = "SELECT * FROM admin";
-        $result = mysqli_query($DB->connect(), $sql);
+        $conn = $this->db->connect();
+        $result = $conn->query($sql);
+
+        $data = [];
         if ($result) {
-            while ($row = mysqli_fetch_assoc($result)) {
+            while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
         }
         return $data;
     }
 }
+?>

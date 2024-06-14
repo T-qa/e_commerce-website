@@ -2,109 +2,106 @@
 require_once(__DIR__ . "/../config/dbconfig.php");
 class Brand
 {
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new DBConnect();
+    }
+
     public function addBrand($name, $desc)
     {
-        $DB = new DBConnect();
-        $conn = $DB->connect();
-        
-        // Prepare the SQL statement
-        $stmt = $conn->prepare("INSERT INTO brand(name, description) VALUES (?, ?)");
-        // Bind the parameters to the SQL query
-        $stmt->bind_param("ss", $name, $desc);
+        $conn = $this->db->connect();
+        try {
+            $stmt = $conn->prepare("INSERT INTO brand(name, description) VALUES (?, ?)");
+            $stmt->bind_param("ss", $name, $desc);
+            $stmt->execute();
 
-        // Execute the prepared statement
-        if ($stmt->execute()) {
             $_SESSION['status_code'] = 'success';
-            $_SESSION['status'] = 'Add Successfully';
+            $_SESSION['status'] = 'Brand Added Successfully';
             header("refresh:1.5;url=brand-view.php");
-        } else {
-            die("Error: " . $stmt->error);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        } finally {
+            $stmt->close();
+            $conn->close();
         }
-        
-        // Close the statement and connection
-        $stmt->close();
-        $conn->close();
     }
 
     public function updateBrand($id, $name, $desc)
     {
-        $DB = new DBConnect();
-        $conn = $DB->connect();
+        $conn = $this->db->connect();
         
-        // Prepare the SQL statement
-        $stmt = $conn->prepare("UPDATE brand SET name=?, description=? WHERE id=?");
-        // Bind the parameters to the SQL query
-        $stmt->bind_param("ssi", $name, $desc, $id);
+        try {
+            $stmt = $conn->prepare("UPDATE brand SET name=?, description=? WHERE id=?");
+            $stmt->bind_param("ssi", $name, $desc, $id);
+            $stmt->execute();
 
-        // Execute the prepared statement
-        if ($stmt->execute()) {
             $_SESSION['status_code'] = 'success';
-            $_SESSION['status'] = 'Update Successfully';
+            $_SESSION['status'] = 'Brand Updated Successfully';
             header("refresh:1.5;url=brand-view.php");
-        } else {
-            die("Error: " . $stmt->error);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        } finally {
+            $stmt->close();
+            $conn->close();
         }
-        
-        // Close the statement and connection
-        $stmt->close();
-        $conn->close();
     }
 
     public function removeBrand($id)
     {
-        $DB = new DBConnect();
-        $conn = $DB->connect();
+        $conn = $this->db->connect();
     
-        // Check if there are any products associated with this brand (optional, based on your needs)
-        $stmt_check = $conn->prepare("SELECT COUNT(*) AS total FROM product WHERE brand_id = ?");
-        $stmt_check->bind_param("i", $id);
-        $stmt_check->execute();
-        $result = $stmt_check->get_result();
-        $row = $result->fetch_assoc();
-        $total_products = $row['total'];
+        try {
+            // Check if there are any products associated with this brand
+            $stmt_check = $conn->prepare("SELECT COUNT(*) AS total FROM product WHERE brand_id = ?");
+            $stmt_check->bind_param("i", $id);
+            $stmt_check->execute();
+            $result = $stmt_check->get_result();
+            $row = $result->fetch_assoc();
+            $total_products = $row['total'];
 
-        if ($total_products > 0) {
-            echo "<script>alert('Cannot delete brand. There are still products associated with it.')</script>";
-            return;
-        }
+            if ($total_products > 0) {
+                echo "<script>alert('Cannot delete brand. There are still products associated with it.')</script>";
+                return;
+            }
 
-        // Proceed with brand deletion
-        $stmt = $conn->prepare("DELETE FROM brand WHERE id=?");
-        $stmt->bind_param("i", $id);
+            // Proceed with brand deletion
+            $stmt = $conn->prepare("DELETE FROM brand WHERE id=?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
 
-        if ($stmt->execute()) {
-            // Reset auto-increment value after successful deletion
-            $conn->query("ALTER TABLE brand AUTO_INCREMENT = 1");
+            // Reset auto-increment value after successful deletion (if desired)
+            //$conn->query("ALTER TABLE brand AUTO_INCREMENT = 1");
             header("refresh:0.5;url=brand-view.php");
-        } else {
-            echo "<script>alert('Error')</script>";
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        } finally {
+            $stmt->close();
+            $conn->close();
         }
-        
-        $stmt->close();
-        $conn->close();
     }
 
     public function fetch()
     {
-        $DB = new DBConnect();
-        $conn = $DB->connect();
-        $data = null;
-        
-        // Prepare the SQL statement
-        $stmt = $conn->prepare("SELECT * FROM brand");
+        $conn = $this->db->connect();
+        $data = [];
 
-        // Execute the prepared statement
-        if ($stmt->execute()) {
+        try {
+            $stmt = $conn->prepare("SELECT * FROM brand");
+            $stmt->execute();
             $result = $stmt->get_result();
+
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        } finally {
+            $stmt->close();
+            $conn->close();
         }
-        
-        // Close the statement and connection
-        $stmt->close();
-        $conn->close();
-        
+
         return $data;
     }
 }

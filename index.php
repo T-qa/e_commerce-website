@@ -63,7 +63,7 @@ if (isset($_POST['action'])) {
                 <div class="row top-products__list">
                     <?php
 
-                    $rows = $product->fetchByCategory('5');
+                    $rows = $product->fetchByCategory('2');
                     if (!empty($rows)) {
                         foreach ($rows as $row) {
                             $heart_status = 'fa fa-heart-o';
@@ -101,7 +101,7 @@ if (isset($_POST['action'])) {
             <div class="top-products__body">
                 <div class="row top-products__list">
                     <?php
-                    $rows = $product->fetchByCategory('3');
+                    $rows = $product->fetchByCategory('1');
                     if (!empty($rows)) {
                         foreach ($rows as $row) {
                             $heart_status = 'fa fa-heart-o';

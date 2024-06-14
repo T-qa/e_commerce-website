@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . "/../config/dbconfig.php");
-require_once("orders.php");
+require_once("order.php");
 require_once("cart.php");
 class CheckoutHandler
 {
