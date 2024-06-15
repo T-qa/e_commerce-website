@@ -1,72 +1,108 @@
 <?php
 require_once(__DIR__ . "/../config/dbconfig.php");
+
 class Wishlist
 {
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new DBConnect();
+    }
+
     public function checkAdded($id, $username)
     {
-        $id = str_replace("'", "", str_replace("/", "", $id));
-        $DB = new DBConnect();
-        $sql = "SELECT * FROM wishlist WHERE username='$username' AND product_id =$id";
-        $result = mysqli_query($DB->connect(), $sql);
-        if ($result->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $id = $this->sanitizeInput($id);
+        $sql = "SELECT * FROM wishlist WHERE username = ? AND product_id = ?";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bind_param("si", $username, $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result->num_rows > 0;
     }
 
     public function remove($id, $username)
     {
-        $DB = new DBConnect();
-        $sql = "DELETE FROM wishlist WHERE username='$username' AND product_id ='$id'";
-        $result = mysqli_query($DB->connect(), $sql);
+        $sql = "DELETE FROM wishlist WHERE username = ? AND product_id = ?";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bind_param("si", $username, $id);
+        
+        if ($stmt->execute()) {
+            // Optional: Handle success
+        } else {
+            die("Error: " . $stmt->error);
+        }
     }
 
     public function add($id, $username)
     {
-        $DB = new DBConnect();
-        $wishlist = new Wishlist();
-        $checker = new Wishlist;
-        if ($checker->checkAdded($id, $username) == false && $_SESSION['username'] != '') {
-            $sql = "INSERT INTO wishlist(username, product_id) VALUES ('$username','$id')";
-            $result = mysqli_query($DB->connect(), $sql);
-            if ($result) {
-            } else {
-                die(mysqli_error($DB->connect()));
-            }
-        } else if ($checker->checkAdded($id, $username) == true) {
-            $wishlist->remove($id, $username);
-        } else if ($_SESSION['username'] == '') {
+        if ($_SESSION['username'] == '') {
             header("Location: ../login.php");
+            exit(); // Stop execution after redirect
+        }
+
+        $wishlist = new Wishlist();
+        $checker = new Wishlist();
+        if (!$checker->checkAdded($id, $username)) {
+            $sql = "INSERT INTO wishlist (username, product_id) VALUES (?, ?)";
+            $stmt = $this->db->connect()->prepare($sql);
+            $stmt->bind_param("si", $username, $id);
+            
+            if ($stmt->execute()) {
+                // Optional: Handle success
+            } else {
+                die("Error: " . $stmt->error);
+            }
+        } else {
+            $wishlist->remove($id, $username);
         }
     }
 
     public function fetch($username)
     {
-        $DB = new DBConnect();
-        $sql = "SELECT username, wishlist.product_id, product.name AS 'product_name', product.price, product.img  FROM wishlist INNER JOIN product ON product.id = wishlist.product_id WHERE username ='$username'";
-        $result = mysqli_query($DB->connect(), $sql);
+        $sql = "SELECT w.username, w.product_id, p.name AS product_name, p.price, p.img 
+                FROM wishlist w
+                INNER JOIN product p ON p.id = w.product_id
+                WHERE w.username = ?";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
         if ($result->num_rows > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
+            $data = [];
+            while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
             return $data;
+        } else {
+            return []; // Return an empty array if no results found
+        }
+    }
+
+    public function wishlistItemsCount($username)
+    {
+        $sql = "SELECT COUNT(*) as items FROM wishlist WHERE username = ?";
+        $stmt = $this->db->connect()->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            $data = $result->fetch_assoc();
+            return $data['items'];
         } else {
             return 0;
         }
     }
 
-
-    public function wishlistItemsCount($username)
+    private function sanitizeInput($input)
     {
-        $DB = new DBConnect();
-        $sql = "SELECT COUNT(*) as items FROM wishlist WHERE username= '$username'";
-        $result = mysqli_query($DB->connect(), $sql);
-        if ($result) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $data[] = $row;
-            }
-        }
-        return $data;
+        // Example of basic input sanitization
+        $input = str_replace("'", "", $input);
+        $input = str_replace("/", "", $input);
+        return $input;
     }
 }
+?>

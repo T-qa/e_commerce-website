@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . "/../config/dbconfig.php");
-require_once("order.php");
-require_once("cart.php");
+require_once(__DIR__ . "/../classes/order.php");
+require_once(__DIR__ . "/../classes/cart.php");
 class CheckoutHandler
 {
     private $order;

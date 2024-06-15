@@ -132,7 +132,12 @@ class Product
     {
         $id = $this->db->connect()->real_escape_string($id);
         $data = null;
-        $sql = "SELECT product.id, product.name, product.description, brand.name AS brand_name, category.name AS category_name, product.price, product.img FROM product INNER JOIN brand ON product.brand_id = brand.id INNER JOIN category ON product.category_id = category.id WHERE product.id=?";
+        $sql = "SELECT product.id, product.name, product.description, brand.name 
+        AS brand_name, category.name 
+        AS category_name, product.price, product.img 
+        FROM product INNER JOIN brand ON product.brand_id = brand.id 
+        INNER JOIN category ON product.category_id = category.id 
+        WHERE product.id=?";
         $stmt = $this->db->connect()->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();

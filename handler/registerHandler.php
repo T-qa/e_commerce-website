@@ -3,7 +3,6 @@ require_once(__DIR__ . "/../config/dbconfig.php");
 require_once(__DIR__ . "/../classes/user.php");
 require_once(__DIR__ . "/../classes/admin.php");
 
-
 class RegisterHandler
 {
     private $user;

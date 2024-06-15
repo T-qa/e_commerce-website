@@ -100,7 +100,7 @@ if (isset($_POST['clear-cart'])) {
                   ';
                     }
                   } else if ($rows == null) {
-                    echo '<td colspan="6"><h3 style="text-align:center;color:gray;">Your wishlist is empty.</h3></td><div>';
+                    echo '<td colspan="6"><h3 style="text-align:center;color:gray;">Your cart is empty.</h3></td><div>';
                   }
                   ?>
                 </tr>
