@@ -39,7 +39,7 @@ if (isset($_GET['delete_id_customer'])) {
             </thead>
             <tbody>
                 <?php
-                $rows = $user->fetchAllUsers();
+                $rows = $user->fetch();
                 if (!empty($rows)) {
                     foreach ($rows as $row) {
                         echo '

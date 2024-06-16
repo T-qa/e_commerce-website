@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-require "./handler/loginHandler.php";
+require "./classes/loginHandler.php";
 $_SESSION['username'] = '';
 $login = new LoginHandler();
-
 if (isset($_POST['submit'])) {
   $login->checkLogin($_POST['username'], md5($_POST['pwd']), 'user');
 }
@@ -39,10 +38,10 @@ if (isset($_POST['submit'])) {
         </i>
       </div>
       <div class="mb-3">
-      <input class="form-control" type="text" id="email-field" name="username" placeholder="Username" style="border-radius: 4px" required />
+        <input class="form-control" type="text" id="email-field" name="username" placeholder="Username" style="border-radius: 4px" required />
       </div>
       <div class="mb-3">
-      <input class="form-control" type="password" id="password-field" name="pwd" placeholder="Password" style="border-radius: 4px" required />
+        <input class="form-control" type="password" id="password-field" name="pwd" placeholder="Password" style="border-radius: 4px" required />
       </div>
       <div class="mb-3">
         <button class="btn btn-primary d-block w-100" name="submit">
@@ -51,15 +50,14 @@ if (isset($_POST['submit'])) {
       </div>
       <a class="forgot" href="register.php">Don't have an account?</a>
       <a class="forgot" href="login-admin.php" style="font-weight: bold;margin-top: 10px;">
-      Admin Login 
-    </a>
+        Admin Login
+      </a>
     </form>
   </section>
   <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>
-
 <?php
 include './config/script.php'
 ?>

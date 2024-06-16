@@ -63,7 +63,7 @@ if (isset($_POST['action'])) {
                 <div class="row top-products__list">
                     <?php
 
-                    $rows = $product->fetchByCategory('2');
+                    $rows = $product->fetchByCategory('5');
                     if (!empty($rows)) {
                         foreach ($rows as $row) {
                             $heart_status = 'fa fa-heart-o';
@@ -101,7 +101,7 @@ if (isset($_POST['action'])) {
             <div class="top-products__body">
                 <div class="row top-products__list">
                     <?php
-                    $rows = $product->fetchByCategory('1');
+                    $rows = $product->fetchByCategory('3');
                     if (!empty($rows)) {
                         foreach ($rows as $row) {
                             $heart_status = 'fa fa-heart-o';
@@ -204,7 +204,7 @@ if (isset($_POST['action'])) {
         function addToWishlist(id) {
             $(document).ready(function() {
                 $.ajax({
-                    url: 'index.php',
+                    url: 'index-logged.php',
                     type: 'POST',
                     data: {
                         id: id,

@@ -35,7 +35,7 @@
                             <a href=""><i class="fa-brands fa-instagram"></i></a>
                         </li>
                         <li>
-                            <a href="https://github.com/T-qa/e_commerce-website"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://github.com/DucLuan22/ecommerce_website"><i class="fa-brands fa-github"></i></a>
                         </li>
                         <li>
                             <a href=""><i class="fa-brands fa-linkedin"></i></a>

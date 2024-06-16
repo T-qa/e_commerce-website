@@ -1,6 +1,5 @@
 <?php
-require "./handler/registerHandler.php";
-
+require "./classes/registerHandler.php";
 if (isset($_POST['submit'])) {
     $register = new RegisterHandler();
     $register->register($_POST['username'], $_POST['email'], md5($_POST['password']), md5($_POST['pass_conf']));
@@ -9,6 +8,7 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -22,6 +22,7 @@ if (isset($_POST['submit'])) {
         }
     </style>
 </head>
+
 <body style="background: rgb(177,213,224);">
     <section class="login-clean" style="background: rgb(177,213,224);">
         <form method="post" style="border-radius: 13px;border-color: var(--bs-gray);background: rgb(205,213,221);">
@@ -38,6 +39,7 @@ if (isset($_POST['submit'])) {
             <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" name="submit">Sign Up</button></div>
             <a class="forgot" href="login.php">Already have an account?</a>
         </form>
+
     </section>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
