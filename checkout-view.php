@@ -1,7 +1,7 @@
 <?php
 require "./classes/cart.php";
 require "./classes/user.php";
-require "./classes/checkoutHandler.php";
+require "./handler/checkoutHandler.php";
 require_once('./config/url.php');
 $url = new URL();
 $user = new User();

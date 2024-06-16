@@ -1,5 +1,5 @@
 <?php
-require "./classes/registerHandler.php";
+require "./handler/registerHandler.php";
 if (isset($_POST['submit'])) {
     $register = new RegisterHandler();
     $register->register($_POST['username'], $_POST['email'], md5($_POST['password']), md5($_POST['pass_conf']));

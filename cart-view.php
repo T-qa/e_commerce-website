@@ -3,7 +3,7 @@ require_once('./classes/cart.php');
 $cart = new Cart();
 if (isset($_POST['action'])) {
   if ($_POST["action"] == "update") {
-    $cart->edit_quantity($_POST['id'], $_SESSION['username'], $_POST['updateQuantity']);
+    $cart->editquantity($_POST['id'], $_SESSION['username'], $_POST['updateQuantity']);
   }
 }
 if (isset($_GET['delete_cart_product'])) {
@@ -100,7 +100,7 @@ if (isset($_POST['clear-cart'])) {
                   ';
                     }
                   } else if ($rows == null) {
-                    echo '<td colspan="6"><h3 style="text-align:center;color:gray;">Your wishlist is empty.</h3></td><div>';
+                    echo '<td colspan="6"><h3 style="text-align:center;color:gray;">Your cart is empty.</h3></td><div>';
                   }
                   ?>
                 </tr>
