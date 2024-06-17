@@ -11,8 +11,10 @@ $wishlist = new Wishlist();
 $product = new Product();
 $cart = new Cart();
 if (isset($_POST['add-to-cart'])) {
-  $cart->addToCart($_GET['product_id'], $_SESSION['username'], $_POST['quantity']);
+  $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1; // Default to 1 if not set
+  $cart->addToCart($_GET['product_id'], $_SESSION['username'], $quantity);
 }
+
 
 if (isset($_POST['wishlist'])) {
   $wishlist->add($_GET['product_id'], $_SESSION['username']);
