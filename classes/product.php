@@ -222,7 +222,25 @@ class Product
 
     public function fetchProductDetailsByID($id)
     {
-        $id = $this->db->connect()->real_escape_string($id);
+        $id = $this->$this->db->connect()->real_escape_string($id);
+        $data = null;
+        $sql = "SELECT product.id, product.name, product.description, brand.name AS brand_name, category.name AS category_name, product.price, product.img, product_details.display, product_details.resolution, product_details.RAM, product_details.memory, product_details.CPU, product_details.GPU, product_details.size, product_details.weight 
+                FROM product 
+                INNER JOIN brand ON product.brand_id = brand.id 
+                INNER JOIN category ON product.category_id = category.id 
+                INNER JOIN product_details ON product.id = product_details.product_id 
+                WHERE product.id=?";
+        $stmt = $this->$this->db->connect()->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result) {
+            $data = $result->fetch_assoc();
+        }
+
+        $stmt->close();
+        return $data;
     }   
     
 }

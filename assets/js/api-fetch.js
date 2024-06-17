@@ -1,4 +1,4 @@
-const selectCity = document.querySelector("#city");
+/*const selectCity = document.querySelector("#city");
 const selectDistrict = document.querySelector("#district");
 const selectWard = document.querySelector("#ward");
 document.addEventListener("DOMContentLoaded", async () => {
@@ -116,4 +116,4 @@ selectDistrict.addEventListener("change", () => {
     .catch((err) => {
       console.log(err);
     });
-});
+});*/
